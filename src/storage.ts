@@ -1,4 +1,4 @@
-function store(key: string, value: any) {
+function store(key: string, value: string) {
     localStorage.setItem(key, value)
 };
 

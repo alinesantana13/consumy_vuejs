@@ -1,6 +1,9 @@
 import { storage } from './storage';
 
-function success(response: any, onSuccess: any) {
+const baseUrl = 'http://localhost:3000';
+const endpoint = '/sign_in';
+
+function success(response: Response, onSuccess: () => void) {
   response.json().then((json: any) => {
     storage.store('token', json.token);
     storage.store('email', json.email);
@@ -8,32 +11,30 @@ function success(response: any, onSuccess: any) {
   });
 }
 
-function failure(response: any, onFailure: any) {
+function failure(response: Response, onFailure: () => void) {
   onFailure()
 }
 
-function loggedIn() {
+function isLoggedIn() {
   return Boolean(storage.get('token'));
 }
 
-function signOut(andThen: (() => void) | null = null) {
+function signOut(andThen = () => { }) {
   storage.remove('token');
   storage.remove('email');
 
-  if (typeof andThen == 'function') {
-    andThen()
-  }
+  andThen()
 }
 
 function currentUser() {
-  if (!loggedIn()) {
+  if (!isLoggedIn()) {
     return null
   }
 
   return { email: storage.get('email') }
 }
 
-async function signIn(email: any, password: any, onSuccess: any, onFailure: any) {
+async function signIn(email: string, password: string, onSuccess: () => void, onFailure: () => void) {
   const body = {
     login: {
       email,
@@ -41,7 +42,9 @@ async function signIn(email: any, password: any, onSuccess: any, onFailure: any)
     }
   };
 
-  await fetch('http://localhost:3000/sign_in', {
+  const url = `${baseUrl}${endpoint}`
+
+  await fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -59,7 +62,7 @@ async function signIn(email: any, password: any, onSuccess: any, onFailure: any)
 
 export const auth = {
   signIn,
-  loggedIn,
+  isLoggedIn,
   signOut,
   currentUser
 };

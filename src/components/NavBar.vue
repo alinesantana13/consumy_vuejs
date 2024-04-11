@@ -3,11 +3,12 @@ import { RouterLink } from 'vue-router';
 import { auth } from '../auth';
 import { ref } from 'vue';
 
+const isLoggedIn = ref(auth.isLoggedIn());
 const currentUser = ref(auth.currentUser());
 
 const signOut = function () {
     auth.signOut(() => {
-        currentUser.value = auth.currentUser()
+        isLoggedIn.value = auth.isLoggedIn()
     })
 }
 </script>
@@ -38,11 +39,10 @@ const signOut = function () {
                     </li>
                 </ul>
                 <ul class="navbar-nav">
-                    <template v-if="currentUser">
+                    <template v-if="isLoggedIn">
                         <li class="d-flex align-items-center me-2" style="text-align: center;">
-                            Hi, {{
-                                currentUser.email }}</li>
-                        <li class="btn btn-outline-success" style="width:5.5rem;" @click="signOut"> Sign Out</li>
+                            Hi, {{ currentUser && currentUser.email }}</li>
+                        <li class="btn btn-outline-success" style="width:5.5rem;" @click="signOut">Sign Out</li>
                     </template>
                     <template v-else>
                         <RouterLink class="btn btn-outline-primary" :to="{ name: 'signin' }">
