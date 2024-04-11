@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { auth } from '../auth';
+import { ref } from 'vue';
+
+const currentUser = ref(auth.currentUser());
+
+const signOut = function () {
+    auth.signOut(() => {
+        currentUser.value = auth.currentUser()
+    })
+}
 </script>
 
 <template>
@@ -7,9 +17,30 @@ import { RouterLink } from 'vue-router';
         <h1>
             Delivery: Welcome
         </h1>
+        <template v-if="currentUser">
+            <h3>Hi, {{ currentUser.email }}</h3>
+            <br />
+            <nav>
+                <a @click="signOut">Sign Out</a>
+            </nav>
+        </template>
 
-        <nav>
-            <RouterLink :to="{ name: 'signin' }">Sign In</RouterLink>
-        </nav>
+        <!-- <template v-else-if="currentUser && currentUser.email == 'undefined'">
+            <h3>Hi, usuário bloqueado</h3>
+            <br />
+            <nav>
+                <RouterLink :to="{ name: 'signin' }">
+                    Sign In
+                </RouterLink>
+            </nav>
+        </template> -->
+
+        <template v-else>
+            <nav>
+                <RouterLink :to="{ name: 'signin' }">
+                    Sign In
+                </RouterLink>
+            </nav>
+        </template>
     </main>
 </template>

@@ -13,6 +13,9 @@ function onSubmit() {
     auth.signIn(email.value, password.value, () => {
         awaiting.value = false
         router.push('/')
+    }, () => {
+        awaiting.value = false
+        console.log('não foi dessa vez!')
     })
 }
 </script>
@@ -22,10 +25,10 @@ function onSubmit() {
         <h1>Sign In</h1>
 
         <form @submit.prevent="onSubmit()">
-            <label>E-mail</label>
+            <label>E-mail </label>
             <input v-model="email" type="email"><br />
 
-            <label>Password</label>
+            <label>Password </label>
             <input v-model="password" type="password"><br />
 
             <button type="submit" v-show="!awaiting">Sign In</button>
