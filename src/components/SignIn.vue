@@ -10,12 +10,13 @@ const awaiting = ref(false);
 
 function onSubmit() {
     awaiting.value = true
+
     auth.signIn(email.value, password.value, () => {
         awaiting.value = false
         router.push('/')
     }, () => {
         awaiting.value = false
-        console.log('não foi dessa vez!')
+        router.push('/first')
     })
 }
 </script>
