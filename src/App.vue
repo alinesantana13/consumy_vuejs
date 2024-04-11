@@ -1,23 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+
+fetch('http://localhost:3000/storeslist').then((res) => res.json()).then((data) => console.log(data)).catch((error) => console.log(error));
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/vamos">Bora Biu</RouterLink>
-      </nav>
-    </div>
-  </header>
-
   <RouterView />
 </template>
 
