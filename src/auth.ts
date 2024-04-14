@@ -1,6 +1,6 @@
 import { storage } from './storage';
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = import.meta.env.VITE_API_SERVER_URL;
 const endpoint = '/sign_in';
 
 function success(response: Response, onSuccess: () => void) {
