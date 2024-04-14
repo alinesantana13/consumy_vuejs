@@ -22,7 +22,7 @@ function onSubmit() {
 </script>
 
 <template>
-    <div>
+    <div class=container>
         <h1>Sign In</h1>
         <form @submit.prevent="onSubmit">
             <label>E-mail </label>
@@ -34,3 +34,15 @@ function onSubmit() {
         </form>
     </div>
 </template>
+
+<style scoped>
+.container {
+    background-color: rgba(240, 0, 0, 0.7);
+    width: 25rem;
+    padding: 2rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+</style>
