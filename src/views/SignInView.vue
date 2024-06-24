@@ -2,7 +2,6 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { Auth } from '../auth'
-import NavBar from '../components/NavBar.vue';
 
 const router = useRouter()
 const awaiting = ref(false)
@@ -27,9 +26,6 @@ function onSubmit(form: Event) {
 </script>
 
 <template>
-  <header>
-    <NavBar :items="['Home']" />
-  </header>
   <div class="container_signin">
     <div class="container_signin_center">
       <div class="signin_title">

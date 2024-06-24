@@ -4,14 +4,16 @@ import { useRoute } from 'vue-router';
 import { ref, watch, defineProps } from 'vue';
 import { Auth } from '../auth'
 
+interface CurrentUser {
+    email: string | null;
+}
 
 const route = useRoute();
-console.log(route.path);
 
 const auth = new Auth()
 
 const isLoggedIn = ref(auth.isLoggedIn())
-const currentUser = ref(auth.currentUser())
+const currentUser = ref<CurrentUser | null>(auth.currentUser())
 
 const signOut = function () {
     auth.signOut(() => isLoggedIn.value = auth.isLoggedIn())
@@ -20,7 +22,7 @@ const signOut = function () {
 const propsItems = defineProps<{ items: Array<string> }>();
 
 watch([isLoggedIn, currentUser], () => {
-    shouldShowNavbar.value = isLoggedIn.value; // ou adicione outra lógica se precisar
+    shouldShowNavbar.value = isLoggedIn.value;
 });
 
 const shouldShowNavbar = ref(false);
@@ -29,7 +31,7 @@ const shouldShowNavbar = ref(false);
 <template>
     <nav v-if="!shouldShowNavbar" class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">#</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">

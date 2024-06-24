@@ -83,4 +83,14 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('../assets/images/background.jpg');
+  background-size: cover;
+}
+
+.store_error {
+  background-color: aliceblue;
+  color: red;
+  width: 400px;
+  padding: 1rem;
+  border-radius: 1rem;
 }

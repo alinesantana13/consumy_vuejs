@@ -15,6 +15,10 @@ class Auth {
     return transient.get(key) || persistent.get(key)
   }
 
+  getFallbackToken(key: string): string | null {
+    return this.getFallback(key);
+  }
+
   success(response: Response, onSuccess: () => void) {
     response.json().then((json) => {
       this.storage.store('token', json.token)

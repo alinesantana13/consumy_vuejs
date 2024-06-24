@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const props = defineProps<{ isLoggedIn: boolean, currentUser: { email: string | null }, signOut: () => void }>();
+interface CurrentUser {
+  email: string | null;
+}
+
+const props = defineProps<{ isLoggedIn: boolean, currentUser: CurrentUser | null, signOut: () => void }>();
 
 </script>
 
