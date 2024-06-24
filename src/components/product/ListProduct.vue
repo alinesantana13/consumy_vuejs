@@ -5,9 +5,6 @@
       <div class="col-sm-10 col-12 store_products_title">
         <h4>Products</h4>
       </div>
-      <div class="col-sm-2 col-12 store_products_title_button">
-        <button class="btn btn-primary" @click="newProduct">New Product</button>
-      </div>
     </div>
     <hr />
     <div class="row" v-if="products">
@@ -28,7 +25,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Store } from '../../requests/store';
 import { Product } from '@/requests/product';
-import type { IStore, IPagination, IProduct } from '../interfaces/interfaces';
+import type { IStore, IProduct } from '../../interfaces/interfaces';
 
 const storeInstance = new Store();
 const productInstance = new Product();
@@ -37,7 +34,6 @@ const store = ref<IStore | null>(null);
 const error = ref<string | null>(null);
 
 const products = ref<IProduct[] | null>(null);
-const paginationProduct = ref<IPagination[] | null>(null);
 const errorProduct = ref<string | null>(null)
 const currentePageProduct = ref(1);
 
@@ -57,9 +53,6 @@ const fetchProduct = async (id: number) => {
   try {
     const response = await productInstance.GetProducts(id, currentePageProduct.value);
     products.value = await response.result.products;
-    if (response.result.pagination) {
-      paginationProduct.value = response.result.pagination;
-    }
     return response;
   } catch (err: any) {
     errorProduct.value = err.toString()
@@ -77,10 +70,6 @@ onMounted(() => {
     error.value = "Invalid store ID.";
   }
 });
-
-const newProduct = () => {
-  router.push(`/stores/${id}/products/new`);
-}
 </script>
 
 <style scoped>

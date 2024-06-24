@@ -8,6 +8,8 @@ import ListProduct from '@/components/product/ListProduct.vue'
 import UnitProduct from '@/components/product/UnitProduct.vue'
 import ListOrder from '@/components/order/ListOrder.vue'
 import { Auth } from '../auth';
+import ShoppingCart from '@/views/ShoppingCart.vue'
+import OrderView from '@/views/OrderView.vue'
 
 const auth = new Auth();
 
@@ -57,6 +59,18 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: ShoppingCart,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      component: OrderView,
+      meta: { requiresAuth: true }
+    }
   ]
 })
 

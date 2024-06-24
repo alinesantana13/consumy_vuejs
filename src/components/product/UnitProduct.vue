@@ -16,6 +16,7 @@
           <h5>{{ product.title }}</h5>
           <p>Ótimo produto</p>
           <p>$ {{ product.price }}</p>
+          <button class="btn btn-primary" @click="addToCart(product)">Add</button>
         </div>
       </div>
       <div v-else>Loading...</div>
@@ -24,13 +25,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Product } from '@/requests/product';
 import type { IProduct } from '@/interfaces/interfaces';
+import { useCounterCart } from '@/store/cart';
 
 const productInstance = new Product();
 const error = ref<string | null>(null);
+
+const cart = useCounterCart();
+const { addToCart } = cart;
 
 const product = ref<IProduct | null>(null);
 const errorProduct = ref<string | null>(null)
@@ -60,6 +65,14 @@ onMounted(() => {
     error.value = "Invalid store ID.";
   }
 });
+
+const currentCount = ref(0);
+
+// watch(currentCount, (newCount) => {
+//   const shoppingCart = { id, title, amount: newCount };
+//   addToCart(product);
+// });
+
 
 </script>
 

@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import UserProfile from './UserProfile.vue';
-import { useRoute } from 'vue-router';
 import { ref, watch, defineProps } from 'vue';
 import { Auth } from '../auth'
+import { useCounterCart } from '@/store/cart';
+import { storeToRefs } from 'pinia';
+
+const cart = useCounterCart();
+const { count } = storeToRefs(cart);
 
 interface CurrentUser {
     email: string | null;
 }
-
-const route = useRoute();
 
 const auth = new Auth()
 
@@ -44,9 +46,19 @@ const shouldShowNavbar = ref(false);
                             item }}
                         </RouterLink>
                     </li>
+                    <li class="nav-item cart-icon">
+                        <RouterLink class="nav-link active" :to="{ name: 'cart' }"><img
+                                src="../assets/images/icon-cart.png" style="width: 25px" /> {{ count }}</RouterLink>
+                    </li>
                 </ul>
                 <UserProfile :isLoggedIn="isLoggedIn" :currentUser="currentUser" :signOut="signOut" />
             </div>
         </div>
     </nav>
 </template>
+
+<style setup>
+/*.cart-icon {
+    background-image: url('../assets/images/icon-cart.png');
+}*/
+</style>
