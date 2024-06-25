@@ -46,7 +46,7 @@
             <p>$ {{ totalAmount.toFixed(2) }}</p>
           </div>
           <div class="d-flex shopping_cart_price_item">
-            <p>Frete</p>
+            <p>Delivery fee</p>
             <p>$ 0,00</p>
           </div>
           <div class="d-flex shopping_cart_price_item">

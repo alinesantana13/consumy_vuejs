@@ -15,8 +15,18 @@ export const useCounterCart = defineStore('counter', () => {
       existingProduct.quantity++;
       count.value++;
     } else {
-      shoppingCart.value.push({ product, quantity: 1 });
-      count.value++;
+      if (shoppingCart.value.length > 0) {
+        const storeIdInCart = shoppingCart.value[0].product.store_id;
+        if (storeIdInCart == product.store_id) {
+          shoppingCart.value.push({ product, quantity: 1 });
+          count.value++;
+        } else {
+          console.log('stores must be the same')
+        }
+      } else {
+        shoppingCart.value.push({ product, quantity: 1 });
+        count.value++;
+      }
     }
   }
 

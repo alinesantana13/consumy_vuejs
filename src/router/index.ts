@@ -6,10 +6,9 @@ import StoresView from '@/views/StoresView.vue'
 import StoreView from '@/views/StoreView.vue'
 import ListProduct from '@/components/product/ListProduct.vue'
 import UnitProduct from '@/components/product/UnitProduct.vue'
-import ListOrder from '@/components/order/ListOrder.vue'
 import { Auth } from '../auth';
 import ShoppingCart from '@/views/ShoppingCart.vue'
-import OrderView from '@/views/OrderView.vue'
+import OrdersView from '@/views/OrdersView.vue'
 
 const auth = new Auth();
 
@@ -52,11 +51,6 @@ const router = createRouter({
           component: UnitProduct,
           meta: { requiresAuth: true }
         },
-        {
-          path: 'orders',
-          component: ListOrder,
-          meta: { requiresAuth: true }
-        }
       ]
     },
     {
@@ -68,7 +62,7 @@ const router = createRouter({
     {
       path: '/orders',
       name: 'orders',
-      component: OrderView,
+      component: OrdersView,
       meta: { requiresAuth: true }
     }
   ]
