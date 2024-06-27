@@ -56,19 +56,58 @@
         </div>
       </div>
       <div class="d-flex justify-content-end mx-2">
-        <button class="btn btn-primary">
-          Finish</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Finish
+        </button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true" style="color: black;">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Payment</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <div v-if="emptyCart">
+                <div class="d-flex align-items-center">
+                  <label>Pay now? </label>
+                  <select v-model="payNow" class="form-select mx-2 w-25">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                </div>
+                <div v-if="payNow == 'Yes'"><br />
+                  <input class="form-control" type="number" v-model="totalAmount" disabled /><br />
+                  <input class="form-control" type="number" v-model="cardNumber" /><br />
+                  <input class="form-control" type="month" v-model="expirationDate" /><br />
+                  <input class="form-control" type="number" v-model="cvvNumber" /><br />
+                </div>
+                <div v-else>
+                </div>
+              </div>
+              <div v-else>
+                <p>Cart empty, please fill cart.</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" v-if="payNow == 'Yes'">Pay</button>
+              <button type="button" class="btn btn-primary" v-else-if="emptyCart">Purchase</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { Store } from '../requests/store';
-import { Product } from '../requests/product';
-import type { IStore, IProduct } from '../interfaces/interfaces';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import type { IProduct } from '../interfaces/interfaces';
 import { useCounterCart } from '@/store/cart';
 import { storeToRefs } from 'pinia';
 
@@ -82,9 +121,28 @@ function increaseQuantity(product: IProduct) {
 function decreaseQuantity(product: IProduct) {
   cart.removeToCart(product);
 }
-
-
+const emptyCart = shoppingCart.value.length > 0;
+const payNow = ref("No");
+const showModal = ref(false);
+const modalTitle = ref('Aviso');
+const modalMessage = ref('Shopping Cart vazio.');
 const router = useRouter();
+
+const value = ref(0);
+const cardNumber = ref(null);
+const expirationDate = ref(null);
+const cvvNumber = ref(null);
+console.log(value);
+console.log(cardNumber);
+console.log(expirationDate);
+console.log(cvvNumber);
+
+const viewPayment = () => {
+  if (shoppingCart.value.length > 0) {
+    router.push(`/payment`);
+  }
+  console.log('Shopping Cart vazio')
+};
 
 </script>
 
