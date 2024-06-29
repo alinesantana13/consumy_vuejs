@@ -81,21 +81,27 @@
                   </select>
                 </div>
                 <div v-if="payNow == 'Yes'"><br />
-                  <input class="form-control" type="number" v-model="totalAmount" disabled /><br />
-                  <input class="form-control" type="number" v-model="cardNumber" /><br />
-                  <input class="form-control" type="month" v-model="expirationDate" /><br />
-                  <input class="form-control" type="number" v-model="cvvNumber" /><br />
+                  <form @submit.prevent="submitOrder">
+                    <input class="form-control" type="number" v-model="totalAmount" disabled /><br />
+                    <input class="form-control" type="number" v-model="cardNumber" required /><br />
+                    <input class="form-control" type="month" v-model="expirationDate" required /><br />
+                    <input class="form-control" type="number" v-model="cvvNumber" required /><br />
+                    <hr />
+                    <div class="d-flex justify-content-end">
+                      <button type="submit" class="btn btn-primary ">Pay</button>
+                    </div>
+                  </form>
                 </div>
                 <div v-else>
+                  <hr />
+                  <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary" @click="submitOrder">Purchase</button>
+                  </div>
                 </div>
               </div>
               <div v-else>
                 <p>Cart empty, please fill cart.</p>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" v-if="payNow == 'Yes'">Pay</button>
-              <button type="button" class="btn btn-primary" v-else-if="emptyCart">Purchase</button>
             </div>
           </div>
         </div>
@@ -110,6 +116,9 @@ import { useRouter } from 'vue-router';
 import type { IProduct } from '../interfaces/interfaces';
 import { useCounterCart } from '@/store/cart';
 import { storeToRefs } from 'pinia';
+import { Order } from '../../src/requests/order';
+
+const orderInstance = new Order();
 
 const cart = useCounterCart();
 const { count, shoppingCart, totalAmount } = storeToRefs(cart);
@@ -119,29 +128,41 @@ function increaseQuantity(product: IProduct) {
 }
 
 function decreaseQuantity(product: IProduct) {
-  cart.removeToCart(product);
+  cart.removeFromCart(product);
 }
 const emptyCart = shoppingCart.value.length > 0;
-const payNow = ref("No");
-const showModal = ref(false);
-const modalTitle = ref('Aviso');
-const modalMessage = ref('Shopping Cart vazio.');
+
 const router = useRouter();
 
-const value = ref(0);
-const cardNumber = ref(null);
-const expirationDate = ref(null);
-const cvvNumber = ref(null);
-console.log(value);
-console.log(cardNumber);
-console.log(expirationDate);
-console.log(cvvNumber);
+const payNow = ref("No");
+const cardNumber = ref('');
+const expirationDate = ref('');
+const cvvNumber = ref('');
 
-const viewPayment = () => {
-  if (shoppingCart.value.length > 0) {
-    router.push(`/payment`);
+
+const submitOrder = async () => {
+  const storeId = shoppingCart.value[0].product.store_id;
+  const productIds = shoppingCart.value.map(item => item.product.id);
+  const amounts = shoppingCart.value.map(item => item.quantity);
+
+  let paymentDetails;
+
+  if (payNow.value === 'Yes') {
+    paymentDetails = {
+      value: totalAmount.value,
+      number: cardNumber.value,
+      valid: expirationDate.value,
+      cvv: cvvNumber.value
+    };
   }
-  console.log('Shopping Cart vazio')
+
+  try {
+    const response = await orderInstance.CreateOrder(storeId, productIds, amounts, payNow.value === 'Yes', paymentDetails);
+    cart.clearCart();
+    router.push('/stores');
+  } catch (error) {
+    console.error('Failed to create order:', error);
+  }
 };
 
 </script>

@@ -60,6 +60,7 @@ class Auth {
     transient.remove('email')
     persistent.remove('token')
     persistent.remove('email')
+    persistent.remove('shoppingCart')
     andThen()
   }
 

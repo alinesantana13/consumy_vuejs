@@ -5,10 +5,10 @@
       <h4>Orders</h4>
     </div>
     <hr />
-    <div class="row">
-      <div v-if="orders.length > 0">
-        <div class="col-lg-2 col-md-3 col-sm-4 col-12 list_orders_card mx-4" v-for="order in orders" :key="order.id">
-          <CardOrder v-if="order.order_items.length > 0" :order="order" />
+    <div class="">
+      <div v-if="orders.length > 0" class="orders_list">
+        <div class="orders_list_cards" v-for="order in orders" :key="order.id">
+          <CardOrder :order="order" />
         </div>
       </div>
       <div v-else>You have not asked</div>
@@ -35,13 +35,32 @@ const error = ref<string | null>(null);
 const fetchOrders = async () => {
   try {
     const response = await orderInstance.GetOrders();
-    orders.value = await response;
-    console.log(orders);
+    let ordersData = await response;
+
+    ordersData = ordersData.map((order: IOrder) => ({
+      ...order,
+      payment_status: mapPaymentStatus(order.payment_status)
+    }));
+
+    orders.value = ordersData.filter((order: IOrder) => order.order_items.length > 0);
     return response;
   } catch (err: any) {
     error.value = err.toString()
   }
 };
+
+function mapPaymentStatus(status: string): string {
+  switch (status) {
+    case 'paid_out':
+      return 'Paid out';
+    case 'in_the_delivery':
+      return 'In the delivery';
+    case 'failed':
+      return 'Failed';
+    default:
+      return status;
+  }
+}
 
 const route = useRoute();
 
@@ -62,5 +81,30 @@ onMounted(() => {
   padding-bottom: 1rem;
   border-radius: 0.5rem;
   ;
+}
+
+.list_orders_title {
+  margin-bottom: 1rem;
+}
+
+.orders_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-around;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  ;
+}
+
+.orders_list_cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.empty_message {
+  margin-top: 1rem;
+  text-align: center;
 }
 </style>

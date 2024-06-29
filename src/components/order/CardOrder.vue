@@ -5,10 +5,12 @@
         <h5>Order</h5>
       </div>
       <div class="col-3">
-        <p>id {{ props.order.id }}</p>
+        <p>Number {{ props.order.id }}</p>
       </div>
     </div>
     <div>
+      <hr />
+      <p class="d-flex justify-content-center">{{ props.order.payment_status }}</p>
       <hr />
       <div>
         <div class="row" v-for="(order_items, index) in props.order.order_items" :key="index">
